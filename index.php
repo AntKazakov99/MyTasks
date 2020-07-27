@@ -1,6 +1,8 @@
 <?php
 $data = json_decode(file_get_contents('http://om-sv.ru/progtest/arData.txt'), true)["SECTIONS"];
 
+$columns = 5;
+
 foreach ($data as $key => $value) {
 	$name[$key] = $value["NAME"];
 }
@@ -23,41 +25,22 @@ foreach ($data as $key => $value) {
 ?>
 
 <table class="lettr_list">
-<?php for ($i=0; $i < count($data1) / 3; $i++): ?>
-<tr>
-<?php if (array_key_exists($i, $data1)): ?>
-<td style="padding:4px;">
-	<?php if ($data1[$i]["type"] == "link"): ?>
-		<a href="<?= $data1[$i]["href"] ?>">
-	<?php endif; ?>
-	<?= $data1[$i]["value"] ?>
-	<?php if ($data1[$i]["type"] == "link"): ?>
-		</a>
-	<?php endif; ?>
-</td>
-<?php endif; ?>
-<?php if (array_key_exists( $i + intdiv( count( $data1), 3) + 1, $data1)): ?>
-<td style="padding:4px;">
-	<?php if ($data1[$i + intdiv( count( $data1), 3) + 1]["type"] == "link"): ?>
-		<a href="<?= $data1[$i + intdiv( count( $data1), 3) + 1]["href"] ?>">
-	<?php endif; ?>
-	<?= $data1[$i + intdiv( count( $data1), 3) + 1]["value"] ?>
-	<?php if ($data1[$i + intdiv( count( $data1), 3) + 1]["type"] == "link"): ?>
-		</a>
-	<?php endif; ?>
-</td>
-<?php endif; ?>
-<?php if (array_key_exists( $i + intdiv( count( $data1), 3) * 2 + 2, $data1)): ?>
-<td style="padding:4px;">
-	<?php if ($data1[$i + intdiv( count( $data1), 3) * 2 + 2]["type"] == "link"): ?>
-		<a href="<?= $data1[$i + intdiv( count( $data1), 3) * 2 + 2]["href"] ?>">
-	<?php endif; ?>
-	<?= $data1[$i + intdiv( count( $data1), 3) * 2 + 2]["value"] ?>
-	<?php if ($data1[$i + intdiv( count( $data1), 3) * 2 + 2]["type"] == "link"): ?>
-		</a>
-	<?php endif; ?>
-</td>
-<?php endif; ?>
-</tr>
-<?php endfor; ?>
+    <?php for ($i=0; $i < count($data1) / $columns; $i++): ?>
+        <tr>
+            <?php for ($j=0; $j < $columns; $j++): ?>
+                <?php $index = $i + intdiv( count( $data1), $columns) * $j + $j; ?>
+                <?php if (array_key_exists($index, $data1)): ?>
+                    <td>
+                        <?php if ($data1[$index]["type"] == "link"): ?>
+                            <a href="<?= $data1[$index]["href"] ?>">
+                        <?php endif; ?>
+                        <?= $data1[$index]["value"] ?>
+                        <?php if ($data1[$index]["type"] == "link"): ?>
+                            </a>
+                        <?php endif; ?>    
+                    </td>
+                <?php endif; ?>
+            <?php endfor; ?>
+        </tr>
+    <?php endfor; ?>
 </table>
